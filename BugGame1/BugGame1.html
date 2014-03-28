@@ -33,35 +33,13 @@ function canvasApp()
 		context.fillRect(0, 0, theCanvas.width,
                          theCanvas.height);
         
-		//Box
-		context.strokeStyle = '#000000'; 
-		context.strokeRect(1,  1, theCanvas.width-2,
-                           theCanvas.height-2);
-        
-        context.fillStyle = '#00AA00';
-        context.fillRect(2,2,theCanvas.width-4,
-                           theCanvas.height-4);
-        
-        // Draw fence
-        context.beginPath();
-        context.moveTo(20,20);
-        context.lineTo(theCanvas.width-20,20);
-        context.lineTo(theCanvas.width-20,
-                       theCanvas.height-20);
-        context.lineTo(20,theCanvas.height-20);
-        context.lineTo(20,15);
-        context.lineWidth=10;
-        context.stroke();
-		
-        // Draw "trees"
-        context.fillStyle = '#000000';
-        context.beginPath();
-        context.arc(300,150,15,0,Math.PI*2,true);
-        context.arc(600,150,15,0,Math.PI*2,true);
-        context.arc(900,150,15,0,Math.PI*2,true);
-        context.closePath();
-		context.fill();
+        //image
+        context.drawImage(parkImage, 0,0);
+
     }
+        //image
+		var parkImage = new Image();
+		parkImage.src = "park.jpg";
     
 	function gameLoop() 
     {
