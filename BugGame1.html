@@ -28,7 +28,10 @@ function canvasApp()
     context = theCanvas.getContext("2d");
     
     function  drawScreen () 
+    
     {
+        var health = 100;
+        
 		context.fillStyle = '#EEEEEE';
 		context.fillRect(0, 0, theCanvas.width,
                          theCanvas.height);
@@ -68,6 +71,11 @@ function canvasApp()
 			context.font         = "20px Sans-Serif";
 			context.textBaseline = "top";
 			context.fillText  ("Wave 1", 50, 25 );
+        
+        
+             
+         
+       
     }
     
 	function gameLoop() 
