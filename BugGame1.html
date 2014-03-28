@@ -61,6 +61,13 @@ function canvasApp()
         context.arc(900,150,15,0,Math.PI*2,true);
         context.closePath();
 		context.fill();
+        
+        //Draw Wave Number
+        //text
+			context.fillStyle    = "#000000";
+			context.font         = "20px Sans-Serif";
+			context.textBaseline = "top";
+			context.fillText  ("Wave 1", 50, 25 );
     }
     
 	function gameLoop() 
