@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Bug Game</title>
-    
+<title>Bug Game</title>  
 <script src="modernizr.js"></script>
 <script type="text/javascript">
 window.addEventListener('load', eventWindowLoaded, false);	
@@ -27,55 +26,58 @@ function canvasApp()
     theCanvas = document.getElementById("canvasOne");
     context = theCanvas.getContext("2d");
     
+    var buttons = [];
+    var tempButton={};
+    
+    var xStart = theCanvas.width+50;
+    var x = xStart;
+    var yStart = 700;
+    var y = yStart;
+    
+    //image
+    var parkImage = new Image();
+    parkImage.src = "park.jpg";
+    
     function  drawScreen () 
-    {
-		context.fillStyle = '#EEEEEE';
-		context.fillRect(0, 0, theCanvas.width,
-                         theCanvas.height);
-        
+    {                
         //image
         context.drawImage(parkImage, 0,0);
         
+        // Draw weapons bar
+        context.fillStyle = 'black';
+        context.fillRect(0,theCanvas.height-100,
+                         theCanvas.width,100);
+        
         //Draw Wave Counter
-        context.fillStyle    = "##000066";
+        context.fillStyle    = "#0000BB";
         context.font         = "50px Sans-Serif";
         context.textBaseline = "top";
-        context.fillText  ("Wave 1", 20, 20 );
+        context.fillText  ("Wave 1", 20,
+                           theCanvas.height-60);
         
-        //Health
         var health=100;
         context.fillStyle="#FF0000";
-        context.fillRect(200,30,(health/100)*140,25);
-    }
-<<<<<<< HEAD
-    
-=======
-    /*function Levels() 
-    {
-        switch Case 0: 
-                drawScreen(); 
-                
+        context.fillRect(220,theCanvas.height-40,
+                         (health/100)*140,25);
         
-                 
-    }*/
->>>>>>> ca84ad67302e531723f8b1c1e1f34c2e72c9eb0e
-        //image
-		var parkImage = new Image();
-		parkImage.src = "park.jpg";
-    
-	function plantTrees()
-    {
+        // Draw bug
+        context.fillStyle = '#FF0000';
+        context.fillRect(x,y,10,10);
+        context.fillRect(x+15,y,10,10);
+        context.fillRect(x,y+15,10,10);
+        context.fillRect(x+15,y+15,10,10);
         
-        
-        
-        
+        if (x!=429)
+        {
+            x=x-3;
+            y=y-((yStart-171)/(xStart-430))*(3);
+        }
     }
     
-    function gameLoop() 
+	function gameLoop() 
     {
         window.setTimeout(gameLoop, 1000/40);
         drawScreen();	
-                
     }
 	gameLoop();
 }
