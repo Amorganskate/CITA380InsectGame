@@ -46,15 +46,21 @@ function canvasApp()
         var health=100;
         context.fillStyle="#FF0000";
         context.fillRect(200,30,(health/100)*140,25);
-        
-        
-
     }
+    
         //image
 		var parkImage = new Image();
 		parkImage.src = "park.jpg";
     
-	function gameLoop() 
+	function plantTrees()
+    {
+        
+        
+        
+        
+    }
+    
+    function gameLoop() 
     {
         window.setTimeout(gameLoop, 1000/40);
         drawScreen();	
