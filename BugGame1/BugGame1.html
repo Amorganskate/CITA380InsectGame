@@ -27,6 +27,8 @@ function canvasApp()
     theCanvas = document.getElementById("canvasOne");
     context = theCanvas.getContext("2d");
     
+    
+    
     function  drawScreen () 
     {
 		context.fillStyle = '#EEEEEE';
@@ -34,6 +36,19 @@ function canvasApp()
                          theCanvas.height);
         
         //image
+        var ashtree0 = new Image();
+        ashtree0.src = "tree0.png";
+        var ashtree1 = new Image();
+        ashtree1.src = "tree1.png";
+        var ashtree2 = new Image();
+        ashtree2.src = "tree2.png";
+        var ashtree3 = new Image();
+        ashtree3.src = "tree3.png";
+        var ashtree4 = new Image();
+        ashtree4.src = "tree4.png";
+        var ashtree5 = new Image();
+        ashtree5.src = "tree5.png";
+        
         context.drawImage(parkImage, 0,0);
         
         //Draw Wave Counter
@@ -46,10 +61,13 @@ function canvasApp()
         var health=100;
         context.fillStyle="#FF0000";
         context.fillRect(200,30,(health/100)*140,25);
+        
+        plantTrees;
+        
     }
-<<<<<<< HEAD
     
-=======
+// <<<<<<< HEAD
+
     /*function Levels() 
     {
         switch Case 0: 
@@ -58,16 +76,15 @@ function canvasApp()
         
                  
     }*/
->>>>>>> ca84ad67302e531723f8b1c1e1f34c2e72c9eb0e
+//
+    
         //image
 		var parkImage = new Image();
 		parkImage.src = "park.jpg";
     
 	function plantTrees()
     {
-        
-        
-        
+       context.drawImage(ashtree0, 200, 200); 
         
     }
     
