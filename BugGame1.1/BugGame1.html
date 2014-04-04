@@ -29,14 +29,88 @@ function canvasApp()
     var buttons = [];
     var tempButton={};
     
+    
+    
     var xStart = theCanvas.width+50;
     var x = xStart;
     var yStart = 700;
     var y = yStart;
+    const GAME_STATE_TITLE = 0;
+    const GAME_STATE_NEW_LEVEL = 1;
+    const GAME_STATE_GAME_OVER = 2;
     
-    //image
-    var parkImage = new Image();
-    parkImage.src = "park.jpg";
+    var currentGameState = 0;
+    var currentGameStateFunction = null;
+    
+    var titlestarted = false; 
+    var keypresslst = []; 
+    
+    function runGame(){
+        currentGameStateFunction();
+        
+    }
+    
+    function switchGameState(newState) {
+        currentGameState = newState;
+        
+        switch (currentGameState) {
+                
+            case GAME_STATE_TITLE:
+                
+                currentGameStateFunction = gameStatePlayLevel;
+                
+                break;
+                
+            case GAME_STATE_NEW_LEVEL:
+                
+                currentGameStateFunction = gameStatePlayLevel;
+                
+                break;
+                
+            case GAME_STATE_GAME_OVER:
+                
+                currentGameStateFunction = gameStateGameOver;
+                
+                break;
+        }
+    }
+    
+    
+    
+  
+    
+  
+    
+    
+    //Title Screen input
+    function gameStateTitle()
+    { 
+        if (titlestarted !=true){
+			
+			context.fillText  ("BugGame", 130, 70);
+			context.fillText  ("Press Space To Play", 120, 140);
+			
+			titlestarted=true;
+		}
+        else
+        {
+			//wait for space key click
+			if (keypresslst[32]==true)
+            {
+				ConsoleLog.log("space pressed");
+				switchGameState(GAME_STATE_NEW_LEVEL);
+				titlestarted=false;
+				
+			}
+        }
+        
+    } 
+    function gameStatePlayLevel()
+    {
+        ConsoleLog.log("appStateGamePlay");
+        //image
+        var parkImage = new Image();
+        parkImage.src = "park.jpg";
     
     function  drawScreen () 
     {                
@@ -72,15 +146,41 @@ function canvasApp()
         {
             x=x-3;
             y=y-((yStart-171)/(xStart-430))*(3);
+            
         }
     }
+    }
+    function gameStateGameOver() {
+        ConsoleLog.log("appStateGameOver");
+    }
     
+    switchGameState(GAME_STATE_TITLE);
+	
+    
+    const FRAME_RATE = 40;
+    var intervalTime = 1000/FRAME_RATE;
+        
 	function gameLoop() 
     {
-        window.setTimeout(gameLoop, 1000/40);
-        drawScreen();	
+        
+            
+        runGame(); 
+            window.setTimeout(gameLoop, intervalTime);
+        
     }
-	gameLoop();
+         
+    gameLoop();
+    
+          //create function that will be added to the class
+console_log=function(message) {
+	if(typeof(console) !== 'undefined' && console != null) 
+    {
+		console.log(message);
+	}
+} 
+//add class/static function to class by assignment
+ConsoleLog.log=console_log;
+    
 }
 
 
