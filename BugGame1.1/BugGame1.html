@@ -2,23 +2,34 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Bug Game</title>  
+<title>Bug Game</title> 
+    
 <script src="modernizr.js"></script>
 <script type="text/javascript">
+<<<<<<< HEAD
     
 window.addEventListener('load', eventWindowLoaded, false);	
+=======
+window.addEventListener('load', eventWindowLoaded, false);
+>>>>>>> 658edb44d3dd6f044e9f1e60c9ad7343ecf20255
     
 function eventWindowLoaded() {
 	canvasApp();
 }
 
-function canvasSupport () {
+function canvasSupport() {
   	return Modernizr.canvas;
 }
 
+<<<<<<< HEAD
 function canvasApp() 
 {
     if (!canvasSupport()) {
+=======
+function canvasApp() {
+	
+  if (!canvasSupport()) {
+>>>>>>> 658edb44d3dd6f044e9f1e60c9ad7343ecf20255
       return;
     } 
     else {
@@ -26,17 +37,23 @@ function canvasApp()
     context = theCanvas.getContext("2d");
     }
     
+<<<<<<< HEAD
     //playfield
 	var xMin=0;
 	var xMax=1600;
 	var yMin=0;
 	var yMax=900;
+=======
+    var buttons = [];
+    var tempButton={};    
+>>>>>>> 658edb44d3dd6f044e9f1e60c9ad7343ecf20255
     
     // Define variables for bugs, including start positions
     var xStart = theCanvas.width+50;
     var x = xStart; 
     var x2 = xStart;
     var yStart = 700;
+<<<<<<< HEAD
     var y = yStart; 
     var y2 = yStart;
     
@@ -72,6 +89,81 @@ function canvasApp()
         // Draw trees
         context.drawImage(treeImage, 339,83);
         context.drawImage(treeImage, 475,384);
+=======
+    var y = yStart;
+    const GAME_STATE_TITLE = 0;
+    const GAME_STATE_NEW_LEVEL = 1;
+    const GAME_STATE_GAME_OVER = 2;
+    
+    var currentGameState = 0;
+    var currentGameStateFunction = null;
+    
+    var titlestarted = false; 
+    var keypresslst = []; 
+}  
+    function runGame(){
+        currentGameStateFunction();        
+    }
+    
+    function switchGameState(newState) {
+        currentGameState = newState;
+        
+        switch (currentGameState) {
+                
+            case GAME_STATE_TITLE:
+                
+                currentGameStateFunction = gameStatePlayLevel;
+                
+                break;
+                
+            case GAME_STATE_NEW_LEVEL:
+                
+                currentGameStateFunction = gameStatePlayLevel;
+                
+                break;
+                
+            case GAME_STATE_GAME_OVER:
+                
+                currentGameStateFunction = gameStateGameOver;
+                
+                break;
+        }
+    }
+        
+    //Title Screen input
+    function gameStateTitle() { 
+        
+        if (titlestarted !=true) {
+			
+			context.fillText  ("BugGame", 130, 70);
+			context.fillText  ("Press Space To Play", 120, 140);
+			
+			titlestarted=true;
+		}
+        else {
+            
+			//wait for space key click
+			if (keypresslst[32]==true) {
+				ConsoleLog.log("space pressed");
+				switchGameState(GAME_STATE_NEW_LEVEL);
+				titlestarted=false;				
+			}
+        }        
+    } 
+    
+    function gameStatePlayLevel() {
+        
+        ConsoleLog.log("appStateGamePlay");
+        //image
+        var parkImage = new Image();
+        parkImage.src = "park.jpg";
+    }
+    
+    function  drawScreen () {
+        
+        //image
+        context.drawImage(parkImage, 0,0);
+>>>>>>> 658edb44d3dd6f044e9f1e60c9ad7343ecf20255
         
         // Draw weapons bar
         context.fillStyle = 'black';
@@ -102,6 +194,7 @@ function canvasApp()
         context.drawImage(bugImage,100*bugImageCounter,0,100,100,x,y,150,150);
         context.drawImage(bugImage,100*bugImageCounter,0,100,100,x2,y2,150,150);
         
+<<<<<<< HEAD
         // Stop bug1 at tree
         if (x!=360)
         {
@@ -125,8 +218,32 @@ function canvasApp()
         if (bugImageCounter >1) {
             bugImageCounter = 0;
         }
+=======
+        if (x!=429) {
+            
+            x=x-3;
+            y=y-((yStart-171)/(xStart-430))*(3);            
+        }
+    }
+
+    function gameStateGameOver() {
+        ConsoleLog.log("appStateGameOver");
     }
     
+    switchGameState(GAME_STATE_TITLE);
+	
+    
+    const FRAME_RATE = 40;
+    var intervalTime = 1000/FRAME_RATE;
+        
+	function gameLoop() {        
+            
+        runGame(); 
+        window.setTimeout(gameLoop, intervalTime);        
+>>>>>>> 658edb44d3dd6f044e9f1e60c9ad7343ecf20255
+    }
+    
+<<<<<<< HEAD
     function startUp(){
 		gameLoop();
 	}
@@ -168,6 +285,18 @@ function canvasApp()
     //----------------------------------------------------------------------------------------------
 }
 
+=======
+    //create function that will be added to the class
+    console_log=function(message) {
+	   if(typeof(console) !== 'undefined' && console != null) {
+		  console.log(message);
+	   }
+    } 
+    
+    //add class/static function to class by assignment
+    ConsoleLog.log=console_log;
+    //}
+>>>>>>> 658edb44d3dd6f044e9f1e60c9ad7343ecf20255
 
 </script>
 </head>
