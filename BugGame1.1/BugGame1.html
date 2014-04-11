@@ -5,7 +5,9 @@
 <title>Bug Game</title>  
 <script src="modernizr.js"></script>
 <script type="text/javascript">
+    
 window.addEventListener('load', eventWindowLoaded, false);	
+    
 function eventWindowLoaded() {
 	canvasApp();
 }
@@ -14,113 +16,76 @@ function canvasSupport () {
   	return Modernizr.canvas;
 }
 
-
 function canvasApp() 
 {
-	
-  if (!canvasSupport()) 
-  {
+    if (!canvasSupport()) {
       return;
-  }
-    
+    } 
+    else {
     theCanvas = document.getElementById("canvasOne");
     context = theCanvas.getContext("2d");
+    }
     
-    var buttons = [];
-    var tempButton={};
+    //playfield
+	var xMin=0;
+	var xMax=1600;
+	var yMin=0;
+	var yMax=900;
     
     
     
+    // Define variables for bugs, including start positions
     var xStart = theCanvas.width+50;
-    var x = xStart;
+    var x = xStart; 
+    var x2 = xStart;
     var yStart = 700;
-    var y = yStart;
-    const GAME_STATE_TITLE = 0;
-    const GAME_STATE_NEW_LEVEL = 1;
-    const GAME_STATE_GAME_OVER = 2;
+    var y = yStart; 
+    var y2 = yStart;
     
-    var currentGameState = 0;
-    var currentGameStateFunction = null;
+    // Images
+    var parkImage = new Image();
+    parkImage.src = "park.jpg";
+    var treeImage = new Image();
+    treeImage.src = "tree0.png";
+    var backpackImage = new Image();
+    backpackImage.src = "BackpackSprayer1.png";
+    var chainsawImage = new Image();
+    chainsawImage.src = "Chainsaw.png"
+    var injectorImage = new Image();
+    injectorImage.src = "TrunkInjector1b.png";
     
-    var titlestarted = false; 
-    var keypresslst = []; 
+    // Bug tilesheet and counter used to animate the image
+    var bugImageCounter = 0;
+    var bugImage = new Image();
+	bugImage.addEventListener('load', eventSheetLoaded, false);
+    bugImage.src = "swarmTile.png";
     
-    function runGame(){
-        currentGameStateFunction();
-        
-    }
-    
-    function switchGameState(newState) {
-        currentGameState = newState;
-        
-        switch (currentGameState) {
-                
-            case GAME_STATE_TITLE:
-                
-                currentGameStateFunction = gameStatePlayLevel;
-                
-                break;
-                
-            case GAME_STATE_NEW_LEVEL:
-                
-                currentGameStateFunction = gameStatePlayLevel;
-                
-                break;
-                
-            case GAME_STATE_GAME_OVER:
-                
-                currentGameStateFunction = gameStateGameOver;
-                
-                break;
-        }
-    }
-    
-    
-    
-  
-    
-  
-    
-    
-    //Title Screen input
-    function gameStateTitle()
-    { 
-        if (titlestarted !=true){
-			
-			context.fillText  ("BugGame", 130, 70);
-			context.fillText  ("Press Space To Play", 120, 140);
-			
-			titlestarted=true;
-		}
-        else
-        {
-			//wait for space key click
-			if (keypresslst[32]==true)
-            {
-				ConsoleLog.log("space pressed");
-				switchGameState(GAME_STATE_NEW_LEVEL);
-				titlestarted=false;
-				
-			}
-        }
-        
-    } 
-    function gameStatePlayLevel()
-    {
-        ConsoleLog.log("appStateGamePlay");
-        //image
-        var parkImage = new Image();
-        parkImage.src = "park.jpg";
+    function eventSheetLoaded() {
+		startUp();
+	}
     
     function  drawScreen () 
-    {                
-        //image
-        context.drawImage(parkImage, 0,0);
+    {   
+        // draw background and text 
+		context.fillStyle = '#000000';
+		context.fillRect(xMin, yMin, xMax, yMax);
+		context.drawImage(parkImage, 0, 0);
+        
+        // Draw trees
+        context.drawImage(treeImage, 339,83);
+        context.drawImage(treeImage, 475,384);
         
         // Draw weapons bar
         context.fillStyle = 'black';
         context.fillRect(0,theCanvas.height-100,
                          theCanvas.width,100);
+        context.fillStyle = '#fff';
+        context.fillRect(900,theCanvas.height-100,100,100);
+        
+        // Draw weapons
+        context.drawImage(backpackImage,500,theCanvas.height-100,100,100);
+        context.drawImage(chainsawImage,700,theCanvas.height-100,100,100);
+        context.drawImage(injectorImage,900,theCanvas.height-100,100,100);
         
         //Draw Wave Counter
         context.fillStyle    = "#0000BB";
@@ -129,67 +94,114 @@ function canvasApp()
         context.fillText  ("Wave 1", 20,
                            theCanvas.height-60);
         
-        //Health Bar Draw
+        // Draw health bar
         var health=100;
         context.fillStyle="#FF0000";
         context.fillRect(220,theCanvas.height-40,
                          (health/100)*140,25);
         
-        // Draw bug
-        context.fillStyle = '#FF0000';
-        context.fillRect(x,y,10,10);
-        context.fillRect(x+15,y,10,10);
-        context.fillRect(x,y+15,10,10);
-        context.fillRect(x+15,y+15,10,10);
+        // Draw bugs
+        context.drawImage(bugImage,100*bugImageCounter,0,100,100,x,y,150,150);
+        context.drawImage(bugImage,100*bugImageCounter,0,100,100,x2,y2,150,150);
         
-        if (x!=429)
+        // Stop bug1 at tree
+        if (x!=360)
         {
-            x=x-3;
-            y=y-((yStart-171)/(xStart-430))*(3);
-            
+            // Update bug1 x and y values
+            x=x-5;
+            y=y-(((yStart-90)/(xStart-360))*(5));
+        }
+        
+        // Stop bug2 at tree
+        if (x2!=504)
+        {
+            // Update bug2 x and y values
+            x2=x2-3;
+            y2=y2-((yStart-396)/(xStart-504))*(3);
+        }
+        
+        // Update bug animation counter
+        bugImageCounter++;
+        
+        // Reset bug counter at end of animation
+        if (bugImageCounter >1) {
+            bugImageCounter = 0;
         }
     }
-    }
-    function gameStateGameOver() {
-        ConsoleLog.log("appStateGameOver");
-    }
     
-    switchGameState(GAME_STATE_TITLE);
-	
-    
-    const FRAME_RATE = 40;
-    var intervalTime = 1000/FRAME_RATE;
-        
-	function gameLoop() 
-    {
-        
-            
-        runGame(); 
-            window.setTimeout(gameLoop, intervalTime);
-        
-    }
-         
-    gameLoop();
-    
-          //create function that will be added to the class
-console_log=function(message) {
-	if(typeof(console) !== 'undefined' && console != null) 
-    {
-		console.log(message);
+    function startUp(){
+		gameLoop();
 	}
-} 
-//add class/static function to class by assignment
-ConsoleLog.log=console_log;
     
+	function gameLoop(){
+        window.setTimeout(gameLoop, 1000/40);
+        drawScreen();	
+    }
+    
+    
+    
+    //----------------------------------------------------------------------------------------------
+    // Sprite object
+    {        
+        // Parameterized constructor
+        function Sprite()
+        {
+            this.image = null;
+            this.x = 0;
+            this.y = 0;
+        }
+    }// End sprite object
+    
+    // Tree object
+    {
+        function Tree()
+        {
+            this.health = 0;
+        }
+        Tree.prototype = new Sprite;
+    }// End tree object
+    
+    // Bug object
+    {
+        function Bug()
+        {
+            
+        }
+        Bug.prototype = new Sprite();
+    }// End bug object
+    //----------------------------------------------------------------------------------------------
 }
 
 
 </script>
-    
 </head>
 <body>
-<div style="position: absolute; top: 50px; left: 50px;">
-    
+<style>
+<style type="text/css">
+    html, body{
+        background-color: #2f9acc;
+        top: 0px;
+        left: 0px;
+        margin: 0px;
+        padding: 0px;
+        color: #fff;
+        height: 100%;
+        overflow: hidden;
+    }
+    #canvasOne {
+        overflow: hidden;
+        image-rendering: optimizeSpeed;
+        -ms-interpolation-mode: nearest-neighbor;
+        -webkit-optimizecontrast;
+        width:100%;
+        height:100%;
+    }
+    :webkit-full-screen {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<div style="top: 0px; left: 0px; height: 100%; width: 100%;">
 <canvas id="canvasOne" width="1600" height="900">
  Your browser does not support the HTML 5 Canvas. 
 </canvas>
