@@ -31,6 +31,11 @@ function canvasApp()
     theCanvas = document.getElementById("canvasOne");
     context = theCanvas.getContext("2d");
     }
+    var state = 'MainMenu'; 
+    var state = 'Playing'; 
+    
+    if (state == 'MainMenu') drawScreen(); 
+    //if (state == 'Playing')
     
     //playfield
 	var xMin=0;
@@ -136,7 +141,7 @@ function canvasApp()
 	function gameLoop(){
 		// set frame rate equal to NTSC standard
         window.setTimeout(gameLoop, 1000/29.97);  
-        drawScreen();	
+        //drawScreen();	
     }
     
     // Sprite object
