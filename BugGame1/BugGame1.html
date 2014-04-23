@@ -14,7 +14,7 @@ Your browser does not support the audio element.
     
 window.addEventListener('load', eventWindowLoaded, false);	
 window.addEventListener( "keypress", doKeyDown, false );
-canvas.addEventListener("mousedown", doMouseDown, false);
+window.addEventListener("mousedown", doMouseDown, false);
 
 function eventWindowLoaded() {
 	canvasApp();
@@ -33,9 +33,7 @@ function canvasApp()
     theCanvas = document.getElementById("canvasOne");
     context = theCanvas.getContext("2d");
     }
-   // var state = 'MainMenu'; 
-    //var state = 'Playing'; 
-   // if (state == 'MainMenu') MainMenu();
+  
     function doKeyDown(e) 
     {
 
