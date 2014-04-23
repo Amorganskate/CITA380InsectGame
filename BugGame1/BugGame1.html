@@ -13,7 +13,9 @@ Your browser does not support the audio element.
 <script type="text/javascript">
     
 window.addEventListener('load', eventWindowLoaded, false);	
-    
+window.addEventListener( "keypress", doKeyDown, false );
+canvas.addEventListener("mousedown", doMouseDown, false);
+
 function eventWindowLoaded() {
 	canvasApp();
 }
@@ -31,11 +33,22 @@ function canvasApp()
     theCanvas = document.getElementById("canvasOne");
     context = theCanvas.getContext("2d");
     }
-    var state = 'MainMenu'; 
-    var state = 'Playing'; 
+   // var state = 'MainMenu'; 
+    //var state = 'Playing'; 
+   // if (state == 'MainMenu') MainMenu();
+    function doKeyDown(e) 
+    {
+
+        alert( e.keyCode )
+
+    }
+    var  GameState;
+////START//
+////PLAY//
+////END//
     
-    if (state == 'MainMenu') drawScreen(); 
-    //if (state == 'Playing')
+    
+   
     
     //playfield
 	var xMin=0;
@@ -73,9 +86,26 @@ function canvasApp()
 	function initSounds(){
 		swarmSound=document.getElementById('swarmSound');
 	}
-	
-    function  drawScreen () 
-    {   
+    function clearCanvas() {
+
+        theCanvas.width = theCanvas.width;
+
+}
+	 GameState = "PLAY";
+    
+    function StartGame()
+    {
+        context.fillStyle = '#000000';
+		context.fillRect(xMin, yMin, xMax, yMax);
+		context.drawImage(parkImage, 0, 0);
+        
+        
+        
+    }
+    
+    
+    function PlayGame()
+    {
         // draw background and text 
 		context.fillStyle = '#000000';
 		context.fillRect(xMin, yMin, xMax, yMax);
@@ -131,17 +161,48 @@ function canvasApp()
         if (bugImageCounter >1) {
             bugImageCounter = 0;
         }
+        
     }
     
+    function EndGame()
+    {
+        context.fillStyle(0,0,255); 
+        
+    }
+    function  drawScreen () 
+    {   
+        if (GameState == "START" ) 
+        {
+            StartGame(); 
+            
+        }
+        else if (GameState =="PLAY")
+        {
+            PlayGame();
+            
+        }
+        else if (GameState == "END")
+        {
+            EndGame(); 
+            
+        }else {
+             postMessage("Something went wrong with game state");
+        }
+            
+        
+        
+    }
     function startUp(){
 		initSounds();
+       
 		gameLoop();
 	}
-    
+     
 	function gameLoop(){
 		// set frame rate equal to NTSC standard
-        window.setTimeout(gameLoop, 1000/29.97);  
-        //drawScreen();	
+        window.setTimeout(gameLoop, 1000/29.97);
+        
+        drawScreen();	
     }
     
     // Sprite object
