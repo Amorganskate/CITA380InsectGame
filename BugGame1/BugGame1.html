@@ -36,17 +36,16 @@ function canvasApp()
   
     function doKeyDown(e) 
     {
-
         alert( e.keyCode )
-
     }
     var  GameState;
+    var StartGameState = 0;
+    var PlayGameState = 1;
+    var EndGameState = 2;
 ////START//
 ////PLAY//
 ////END//
-    
-    
-   
+    GameState = StartGameState;
     
     //playfield
 	var xMin=0;
@@ -84,30 +83,45 @@ function canvasApp()
 	function initSounds(){
 		swarmSound=document.getElementById('swarmSound');
 	}
+    
     function clearCanvas() {
-
         theCanvas.width = theCanvas.width;
-
-}
-	 GameState = "PLAY";
+    }
     
     function StartGame()
     {
         context.fillStyle = '#000000';
 		context.fillRect(xMin, yMin, xMax, yMax);
-		context.drawImage(parkImage, 0, 0);
         
         
+        // Draw Text
+        context.fillStyle = '#fff';
+        context.font = "50px Arial";
+        context.textAlign = "center";
+        context.fillText("TAP ANYWHERE TO START", theCanvas.width/2, theCanvas.height*(3/4));
+        context.fillStyle = '#090';
+        context.font = "100px Arial italic";
+        context.textAlign = "center";
+        context.fillText("BUG GAME", theCanvas.width/2, theCanvas.height*(1/4));
         
+        // Add mouse down event listener
+        theCanvas.addEventListener("mousedown", onMouseClickStart, false);
     }
+    
+    // function to be used with mousedown event listener
+    function onMouseClickStart(e) {
+		theCanvas.removeEventListener("mousedown", onMouseClickStart, false);
+		GameState = PlayGameState;
+	}
     
     
     function PlayGame()
     {
         // draw background and text 
-		context.fillStyle = '#000000';
+		context.fillStyle = '#fff';
+        context.textAlign = "left";
 		context.fillRect(xMin, yMin, xMax, yMax);
-		context.drawImage(parkImage, 0, 0);
+		context.drawImage(parkImage, 0, 0, 1920, 980);
         
         // Draw trees
         context.drawImage(treeImage, 339,83);
@@ -159,27 +173,25 @@ function canvasApp()
         if (bugImageCounter >1) {
             bugImageCounter = 0;
         }
-        
     }
     
     function EndGame()
     {
-        context.fillStyle(0,0,255); 
-        
+        context.fillStyle = "#00F";
     }
+    
     function  drawScreen () 
     {   
-        if (GameState == "START" ) 
+        if (GameState == StartGameState ) 
         {
             StartGame(); 
-            
         }
-        else if (GameState =="PLAY")
+        else if (GameState == PlayGameState)
         {
             PlayGame();
             
         }
-        else if (GameState == "END")
+        else if (GameState == EndGameState)
         {
             EndGame(); 
             
@@ -190,83 +202,55 @@ function canvasApp()
         
         
     }
+    
     function startUp(){
 		initSounds();
-       
 		gameLoop();
 	}
      
 	function gameLoop(){
 		// set frame rate equal to NTSC standard
         window.setTimeout(gameLoop, 1000/29.97);
-        
         drawScreen();	
     }
-    
-    // Sprite object
-    {        
-        // Parameterized constructor
-        function Sprite()
-        {
-            this.image = null;
-            this.x = 0;
-            this.y = 0;
-        }
-    }// End sprite object
-    
-    // Tree object
-    {
-        function Tree()
-        {
-            this.health = 0;
-        }
-        Tree.prototype = new Sprite;
-    }// End tree object
-    
-    // Bug object
-    {
-        function Bug()
-        {
-            
-        }
-        Bug.prototype = new Sprite();
-    }// End bug object
 }
 
 
 </script>
 </head>
 <body>
+    
 <style>
 <style type="text/css">
-    html, body{
-        background-color: #2f9acc;
-        top: 0px;
-        left: 0px;
-        margin: 0px;
-        padding: 0px;
-        color: #fff;
-        height: 100%;
-        overflow: hidden;
-    }
-    #canvasOne {
-        overflow: hidden;
-        image-rendering: optimizeSpeed;
-        -ms-interpolation-mode: nearest-neighbor;
-        -webkit-optimizecontrast;
-        width:100%;
-        height:100%;
-    }
-    :webkit-full-screen {
-        width: 100%;
-        height: 100%;
-    }
+    html, body {
+            background-color: #2f9acc;
+            margin: 20px;
+            padding: 20px;
+            color: #fff;
+			height: 100%;
+  			overflow: hidden;
+        }
+
+        #canvasOne {
+            overflow: hidden;
+            image-rendering: optimizeSpeed;
+            -ms-interpolation-mode: nearest-neighbor;
+            -webkit-optimize-contrast;
+			width:100%;
+			height:100%;
+		}
+                      
+        :webkit-full-screen {
+            width: 100%;
+            height: 100%;
+        }
 </style>
+    
 <div style="top: 0px; left: 0px; height: 100%; width: 100%;">
-<canvas id="canvasOne" width="1600" height="900">
+<canvas id="canvasOne" width="1920" height="1080">
  Your browser does not support the HTML 5 Canvas. 
 </canvas>
-
 </div>
+    
 </body>
 </html>
