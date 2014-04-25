@@ -40,11 +40,14 @@ function canvasApp()
     }
     var  GameState;
     var StartGameState = 0;
+    
     var PlayGameState = 1;
     var EndGameState = 2;
-////START//
-////PLAY//
-////END//
+    var InfoGameState = 3;
+    ////START//
+    ////INFO//
+    ////PLAY//
+    ////END//
     GameState = StartGameState;
     
     //playfield
@@ -66,6 +69,12 @@ function canvasApp()
     parkImage.src = "park.jpg";
     var treeImage = new Image();
     treeImage.src = "tree0.png";
+    var backpackImage = new Image();
+    backpackImage.src = "BackpackSprayer1.png";
+    var chainsawImage = new Image();
+    chainsawImage.src = "Chainsaw.png"
+    var injectorImage = new Image();
+    injectorImage.src = "TrunkInjector1b.png";
 	
 	// Sounds
 	var swarmSound;
@@ -75,6 +84,10 @@ function canvasApp()
     var bugImage = new Image();
 	bugImage.addEventListener('load', eventSheetLoaded, false);
     bugImage.src = "swarmTile.png";
+    
+   
+    
+    
     
     function eventSheetLoaded() {
 		startUp();
@@ -111,12 +124,23 @@ function canvasApp()
     // function to be used with mousedown event listener
     function onMouseClickStart(e) {
 		theCanvas.removeEventListener("mousedown", onMouseClickStart, false);
-		GameState = PlayGameState;
+		 GameState = InfoGameState;
+       
+            
+            
+	}
+    function onMouseClickSt(e) {
+		theCanvas.removeEventListener("mousedown", onMouseClickStart, false);
+		 GameState = PlayGameState;
+       
+            
+            
 	}
     
     
     function PlayGame()
     {
+        clearCanvas();
         // draw background and text 
 		context.fillStyle = '#fff';
         context.textAlign = "left";
@@ -139,6 +163,10 @@ function canvasApp()
         context.fillText  ("Wave 1", 20,
                            theCanvas.height-60);
         
+                //context.drawImage(backpackImage,500,theCanvas.height-100,100,100);
+        //context.drawImage(chainsawImage,700,theCanvas.height-100,100,100);
+        //context.drawImage(injectorImage,900,theCanvas.height-100,100,100);
+        
         // Draw health bar
         var health=100;
         context.fillStyle="#FF0000";
@@ -159,11 +187,11 @@ function canvasApp()
         }
         
         // Stop bug2 at tree
-        if (x2!=504)
+        if (x2!=503)
         {
             // Update bug2 x and y values
             x2=x2-3;
-            y2=y2-((yStart-396)/(xStart-504))*(3);
+            y2=y2-((yStart-396)/(xStart-503))*(3);
         }
 		
         // Update bug animation counter
@@ -178,6 +206,29 @@ function canvasApp()
     function EndGame()
     {
         context.fillStyle = "#00F";
+        // Add mouse down event listener
+        theCanvas.addEventListener("mousedown", onMouseClickSt, false);
+    }
+    
+    function InfoGame()
+    {
+        clearCanvas(); 
+		
+        //Draws Bug image in upper left corner
+        context.drawImage(bugImage, 100*bugImageCounter,0,100,100); 
+        
+        //Draws Text to screen - Info about Emerald Ash borer
+        context.fillStyle = '#00000f';
+        context.font = "20px Arial";
+        context.textAlign = "center";
+        context.fillText("Emerald Ash Borer: Native Asia and Eastern Russia.Emerald Ash Borer is a highly invasive species and they are highly destructive to ash trees.Most damage caused by emerald ash borer is caused in its larvae stage.", 950,200);
+        //Red Background - Needs change
+        context.fillStyle = '#FF0000';
+        
+        // Add mouse down event listener
+        theCanvas.addEventListener("mousedown", onMouseClickSt, false);
+        
+        
     }
     
     function  drawScreen () 
@@ -185,6 +236,10 @@ function canvasApp()
         if (GameState == StartGameState ) 
         {
             StartGame(); 
+        }
+        else if (GameState == InfoGameState)
+        {
+           InfoGame();  
         }
         else if (GameState == PlayGameState)
         {
