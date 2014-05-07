@@ -11,7 +11,7 @@ Your browser does not support the audio element.
 
 <script src="modernizr.js"></script>
 <script type="text/javascript">
-//Listner events - keypress, mouseclick
+    
 window.addEventListener('load', eventWindowLoaded, false);	
 window.addEventListener( "keypress", doKeyDown, false );
 window.addEventListener("mousedown", doMouseDown, false);
@@ -38,11 +38,10 @@ function canvasApp()
     {
         alert( e.keyCode )
     }
-    //GameState Variables
+    
     var GameState;
-    //Start Game Screen
     var StartGameState = 0;
-    //Other states 
+    
     var PlayGameState = 1;
     var EndGameState = 2;
     var InfoGameState = 3;
@@ -50,7 +49,6 @@ function canvasApp()
     ////INFO//
     ////PLAY//
     ////END//
-    //Defaults GameState as MainMenu
     GameState = StartGameState;
     
     //playfield
@@ -60,11 +58,9 @@ function canvasApp()
 	var yMax=1080;
     
     // Define variables for bugs, including start positions
-    //Set array for bugs and trees
     var Bug = [];
     var Tree = [];
-    //Sets how many bugs can be on screen & How many Trees can be on screen
-    var bugCount = 2;
+    var bugCount = 8;
     var treeCount = 10;
     var bugXStart = theCanvas.width+50;
     var bugYStart = 700;
@@ -87,22 +83,23 @@ function canvasApp()
 	// Sounds
 	var swarmSound;
 	
-	
+	// Sounds
+	var swarmSound;
 	
     startUp(); 
     
     function eventSheetLoaded() {
 		startUp();
 	}
-    //Sound function
+    
 	function initSounds(){
 		swarmSound=document.getElementById('swarmSound');
 	}
-    //Function for wiping canvas
+    
     function clearCanvas() {
         theCanvas.width = theCanvas.width;
     }
-    //Mainmenu state
+    
     function StartGame()
     {
         context.fillStyle = '#000000';
@@ -127,12 +124,12 @@ function canvasApp()
 		theCanvas.removeEventListener("mousedown", onMouseClickStart, false);
         GameState = InfoGameState;    
 	}
-    //Function for going from infoscreen to playstate
+    // function to be used with mousedown event listener
     function onMouseClickSt(e) {
-		theCanvas.removeEventListener("mousedown", onMouseClickStart, false);
-        GameState = PlayGameState;        
+		theCanvas.removeEventListener("mousedown", onMouseClickSt, false);
+        GameState = PlayGameState;;    
 	}
-    //creates array for trees and uses for loop to set properties and posistion 
+    
     function CreateTrees()
     {
         Tree = [];
@@ -147,10 +144,12 @@ function canvasApp()
             Tree.push(tempTree);
         }
     }
-    //Creates array for bugs and uses lopp to set propeties and position for each object
+    
     function CreateBugs()
     {
+        //Array of bugs
         Bug = [];
+        //For each bug set propertys 
         for (var newBugCounter=0; newBugCounter <= bugCount; newBugCounter++)
         {
             var tempBug = {};
@@ -161,10 +160,11 @@ function canvasApp()
             Bug.push(tempBug);
         }
     }
-    //Draws other trees 
+    
     function DrawTrees()
     {
-        for (var i=0; i<=Tree.length; i++)
+        //Draws Trees
+        for (var i=0; i<Tree.length; i++)
         {
             var tempTree = Tree[i];
             context.save();
@@ -175,7 +175,8 @@ function canvasApp()
     
     function DrawBugs()
     {
-        for (var j=0; j<=Bug.length; j++)
+        //Draws Bugs
+        for (var j=0; j<Bug.length; j++)
         {
             var tempBug = Bug[j];
             context.save();
@@ -191,21 +192,20 @@ function canvasApp()
                 context.drawImage(bugImage,0,0,tempBug.width/2,tempBug.height,Tree[j].x,Tree[j].y,150,150);
             }
             
-            // Update bug animation counter
-            bugImageCounter++;
-        
-            // Reset bug counter at end of animation
-            if (bugImageCounter >1) {
-                bugImageCounter = 0;
-            }
-            
             context.restore();
+        }
+        // Update bug animation counter
+        bugImageCounter++;
+        
+        // Reset bug counter at end of animation
+        if (bugImageCounter >1) {
+            bugImageCounter = 0;
         }
     }
     
     function PlayGame()
     {   
-        clearCanvas();
+        // clearCanvas();
         // draw background and text 
 		context.fillStyle = '#fff';
         context.textAlign = "left";
@@ -224,9 +224,10 @@ function canvasApp()
         context.fillText  ("Wave 1", 20,
                            theCanvas.height-60);
         
-        //context.drawImage(backpackImage,500,theCanvas.height-100,100,100);
-        //context.drawImage(chainsawImage,700,theCanvas.height-100,100,100);
-        //context.drawImage(injectorImage,900,theCanvas.height-100,100,100);
+        //Draws Weapons on bottom bar
+        context.drawImage(backpackImage,500,theCanvas.height-100,100,100);
+        context.drawImage(chainsawImage,700,theCanvas.height-100,100,100);
+        context.drawImage(injectorImage,900,theCanvas.height-100,100,100);
         
         // Draw health bar
         var health=100;
@@ -237,21 +238,53 @@ function canvasApp()
 		swarmSound.play();
         DrawTrees();
         DrawBugs();
-    }
         
+        context.filltext (bugCount,the.height-40); 
+    }
+    
+    // Add mouse down event listener
+    theCanvas.addEventListener("click", onMouseClickBug, false);
+    
+    // function to be used with mousedown event listener
+    function onMouseClickBug(e) {
+        
+        e.preventDefault();
+        
+        var mouseX;
+		var mouseY;
+		
+		var xFactor = theCanvas.width / window.innerWidth;
+		var yFactor = theCanvas.height / window.innerHeight;
+		
+		var mouseX1 = e.clientX - theCanvas.offsetLeft;
+		var mouseY1 = e.clientY - theCanvas.offsetTop;
+        
+	    mouseX = mouseX1 * xFactor;
+		mouseY = mouseY1 * yFactor;
+        
+        mouseX = Math.floor(mouseX);
+        mouseY = Math.floor(mouseY);
+        
+
+        
+        context.font = '18pt Calibri';
+        context.fillStyle = '#ff0';
+        context.fillText('Mouse position: ' + mouseX + ',' + mouseY, 10, 25);
+	}
+        //EndGame State
     function EndGame()
     {
         context.fillStyle = "#00F";
         // Add mouse down event listener
         theCanvas.addEventListener("mousedown", onMouseClickSt, false);
     }
-    
+    //Information Screen
     function InfoGame()
     {
         clearCanvas(); 
 		
         //Draws Bug image in upper left corner
-        context.drawImage(bugImage, 100*bugImageCounter,0,100,100, (theCanvas.width/2)-200,400,400,400); 
+        context.drawImage(bugImage,100*bugImageCounter,0,100,100, (theCanvas.width/2)-200,400,400,400); 
         
         // Update bug animation counter
         bugImageCounter++;
@@ -311,7 +344,7 @@ function canvasApp()
 	function gameLoop(){
 		// set frame rate equal to NTSC standard
         window.setTimeout(gameLoop, 1000/29.97);
-        drawScreen();	
+        drawScreen();
     }
 }
 
@@ -345,7 +378,10 @@ function canvasApp()
             height: 100%;
         }
 </style>
-    
+    <menu type ="context" id="menu">
+<menuitem label="Refresh"onclick="window.location.reload();"></menuitem>
+        <menuitem label= "WikiPage"></menuitem>
+                 </menu>
 <div style="top: 0px; left: 0px; height: 100%; width: 100%;">
 <canvas id="canvasOne" width="1920" height="1080">
  Your browser does not support the HTML 5 Canvas. 
